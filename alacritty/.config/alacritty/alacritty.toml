@@ -12,7 +12,7 @@ x = 4
 y = 4 
 
 [font]
-size = 9.5
+size = 10
 
 [font.normal]
 family="JetBrainsMonoNL Nerd Font"
