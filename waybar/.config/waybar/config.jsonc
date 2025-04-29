@@ -7,7 +7,7 @@
         "output": [ "eDP-1" ],
         "position": "top",
         "mod": "dock",
-        "height": 30,
+        "height": 32,
         "exclusive": true,
         "passthrough": false,
         "gtk-layer-shell": true,
@@ -18,11 +18,14 @@
     
         "modules-left": ["custom/padd","custom/l_end","cpu","memory","custom/r_end","custom/l_end","clock","custom/r_end","custom/padd"],
         "modules-center": ["custom/padd","custom/l_end","hyprland/workspaces","hyprland/window","custom/r_end","custom/padd"],
-        "modules-right": ["custom/padd","custom/l_end","backlight","network","pulseaudio","pulseaudio#microphone","custom/updates","custom/r_end","custom/l_end","privacy","tray","battery","custom/r_end","custom/l_end","custom/power","custom/r_end","custom/padd"],
+        "modules-right": ["custom/padd","custom/l_end","custom/clipse","custom/r_end","custom/l_end","backlight","network","pulseaudio","pulseaudio#microphone","custom/updates","custom/r_end","custom/l_end","privacy","tray","battery","custom/r_end","custom/l_end","custom/power","custom/r_end","custom/padd"],
     
     
     // sourced from modules based on config.ctl //
-    
+        "custom/clipse":{
+          "on-click":"alacritty --class clipse -e clipse",
+          "format":""
+  }, 
         "cpu": {
             "interval": 10,
             "format": "󰍛 {usage}%",
@@ -133,17 +136,19 @@
             "format-linked": "󰈀 {ifname} (No IP)",
             "format-disconnected": "󰖪 ",
             "tooltip-format-disconnected": "Disconnected",
-            "format-alt": "<span foreground='#99ffdd'> {bandwidthDownBytes}</span> <span foreground='#ffcc66'> {bandwidthUpBytes}</span>",
+            // "format-alt": "<span foreground='#99ffdd'> {bandwidthDownBytes}</span> <span foreground='#ffcc66'> {bandwidthUpBytes}</span>",
             "interval": 2,
-        },
+            "on-click":"alacritty --class nmtui-term -e nmtui",      
+            // "on-scroll-down":"alacritty --class nmtui-term -e nmtui",
+  },
     
     "pulseaudio": {
         "format": "{icon} {volume}",
         "rotate": 0,
         "format-muted": "󰝟",
-        "on-click": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
-        "on-scroll-up": "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+ -l 1",
-        "on-scroll-down": "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-",
+        "on-click": "swayosd-client --output-volume=mute-toggle",
+        "on-scroll-up": "swayosd-client --output-volume=+5",
+        "on-scroll-down": "swayosd-client --output-volume=-5",
         "tooltip-format": "{icon} {desc} // {volume}%",
         "scroll-step": 5,
         "format-icons": {
@@ -162,7 +167,9 @@
         "rotate": 0,
         "format-source": "",
         "format-source-muted": "",
-        "on-click": "pavucontrol -t 4",
+        "on-click": "swayosd-client --input-volume=mute-toggle",
+        "on-scroll-up": "swayosd-client --input-volume=+5",
+        "on-scroll-down": "swayosd-client --input-volume=-5",
         "tooltip-format": "{format_source} {source_desc} // {source_volume}%",
         "scroll-step": 5
     },
