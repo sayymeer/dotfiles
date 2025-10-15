@@ -1,11 +1,11 @@
-require "nvchad.mappings"
+require("nvchad.mappings")
 
 -- add yours here
 
 local map = vim.keymap.set
 
 map("n", ";", ":", { desc = "CMD enter command mode" })
-map("i", "jk", "<ESC>")
+-- map("i", "jk", "<ESC>")
 
 -- map({"n","i","v","x","s","c"},"<C-space>","<ESC>")
 
@@ -19,3 +19,5 @@ map("n", "<C-k>", "<cmd> TmuxNavigateUp<CR>", { desc = "window up" })
 
 map("n", "<leader>db", "<cmd> DapToggleBreakpoint <CR>", { desc = "Add Breakpoint at line" })
 map("n", "<leader>dr", "<cmd> DapContinue <CR>", { desc = "Start or Continue the debugger" })
+
+map("n", "<F2>", "<cmd> lua vim.lsp.buf.rename() <CR>", { desc = "Start or Continue the debugger" })

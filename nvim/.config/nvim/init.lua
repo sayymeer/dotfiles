@@ -1,39 +1,48 @@
-vim.g.base46_cache = vim.fn.stdpath "data" .. "/nvchad/base46/"
+vim.g.base46_cache = vim.fn.stdpath("data") .. "/nvchad/base46/"
 vim.g.mapleader = " "
 
 -- bootstrap lazy and all plugins
-local lazypath = vim.fn.stdpath "data" .. "/lazy/lazy.nvim"
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 
 if not vim.uv.fs_stat(lazypath) then
-  local repo = "https://github.com/folke/lazy.nvim.git"
-  vim.fn.system { "git", "clone", "--filter=blob:none", repo, "--branch=stable", lazypath }
+	local repo = "https://github.com/folke/lazy.nvim.git"
+	vim.fn.system({ "git", "clone", "--filter=blob:none", repo, "--branch=stable", lazypath })
 end
 
 vim.opt.rtp:prepend(lazypath)
 vim.wo.relativenumber = true
 
-
-local lazy_config = require "configs.lazy"
+local lazy_config = require("configs.lazy")
 
 -- load plugins
 require("lazy").setup({
-  {
-    "NvChad/NvChad",
-    lazy = false,
-    branch = "v2.5",
-    import = "nvchad.plugins",
-  },
+	{
+		"NvChad/NvChad",
+		lazy = false,
+		branch = "v2.5",
+		import = "nvchad.plugins",
+	},
 
-  { import = "plugins" },
+	{ import = "plugins" },
 }, lazy_config)
 
 -- load theme
 dofile(vim.g.base46_cache .. "defaults")
 dofile(vim.g.base46_cache .. "statusline")
 
-require "options"
-require "nvchad.autocmds"
+require("options")
+require("nvchad.autocmds")
 
 vim.schedule(function()
-  require "mappings"
+	require("mappings")
 end)
+
+-- disable nvim-tree offset for tabline
+vim.api.nvim_create_autocmd("BufEnter", {
+	callback = function()
+		local status_ok, nvim_tree_api = pcall(require, "nvim-tree.api")
+		if status_ok and nvim_tree_api.tree.is_tree_buf() then
+			vim.cmd("setlocal winbar=") -- clear winbar/tabline offset for tree buffer
+		end
+	end,
+})

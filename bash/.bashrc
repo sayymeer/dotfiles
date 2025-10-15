@@ -52,7 +52,7 @@ if [ -n "$force_color_prompt" ]; then
 fi
 
 if [ "$color_prompt" = yes ]; then
-   PS1='\[\033[34m\][\u@\h]\[\033[00m\]:\[\033[01;32m\]\w\[\033[00m\]\n\[\e\[\033[1;34m\]$\[\e[1;37m\]\[\e[1;36m\]>\[\e[0;37m\] ' 
+    PS1='\[\033[1;34m\][\u]\[\033[0m\]:\[\033[1;32m\]\w\[\033[0m\]\n\[\033[1;34m\]\$\[\033[0m\] '
   else
     PS1='\u@\h:\w\$ '
 fi
@@ -118,3 +118,18 @@ export EDITOR="nvim"
 # uv
 export PATH="/home/sameer/.local/bin:$PATH"
 export GOPATH="/home/sameer/go"
+
+
+# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
+export PATH="$PATH:$HOME/.rvm/bin"
+
+[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
+
+. "$HOME/.cargo/env"
+
+# alias
+alias qq="exit"
+
+# Add zoxide init
+eval "$(zoxide init bash)"
+

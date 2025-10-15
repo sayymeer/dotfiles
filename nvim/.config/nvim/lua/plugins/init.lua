@@ -1,5 +1,35 @@
 return {
 	{
+		"nvim-neo-tree/neo-tree.nvim",
+		branch = "v3.x",
+		dependencies = {
+			"nvim-lua/plenary.nvim",
+			"nvim-tree/nvim-web-devicons",
+			"MunifTanjim/nui.nvim",
+		},
+		opts = {
+			window = {
+				position = "right", -- open on right
+				width = 30,
+			},
+			filesystem = {
+				follow_current_file = true,
+				use_libuv_file_watcher = true,
+			},
+		},
+		config = function(_, opts)
+			require("neo-tree").setup(opts)
+		end,
+	},
+	{
+		"nvim-tree/nvim-tree.lua",
+		opts = require("configs.nvtree"),
+		config = function(_, opts)
+			require("nvim-tree").setup(opts)
+		end,
+	},
+
+	{
 		"stevearc/conform.nvim",
 		event = { "BufWritePre", "VeryLazy" }, -- uncomment for format on save
 		config = function()
@@ -200,10 +230,10 @@ return {
 			require("venv-selector").setup({
 				auto_refresh = true,
 				-- path = "/home/sameer/code/",
-				-- search_venv_managers = false,
+				search_venv_managers = true,
 				search = true,
 				parents = 4,
-				-- name = { ".venv", "venv" },
+				name = { ".venv", "venv" },
 			})
 		end,
 		keys = {
@@ -235,21 +265,30 @@ return {
 	},
 	{
 		"OXY2DEV/markview.nvim",
-		lazy = false,
-	},
-	{
-		"nvimdev/dashboard-nvim",
-		event = "VimEnter",
+		ft = { "markdown" },
 		config = function()
-			require("dashboard").setup({
-				-- config
+			require("markview").setup({
+				markdown = {
+					latex = {
+						enabled = true, -- turn on LaTeX highlighting/rendering
+					},
+				},
 			})
 		end,
-		dependencies = { { "nvim-tree/nvim-web-devicons" } },
 	},
+	-- {
+	-- 	"nvimdev/dashboard-nvim",
+	-- 	event = "VimEnter",
+	-- 	config = function()
+	-- 		require("dashboard").setup({
+	-- 			-- config
+	-- 		})
+	-- 	end,
+	-- 	dependencies = { { "nvim-tree/nvim-web-devicons" } },
+	-- },
 	{
 		"lervag/vimtex",
-		lazy = false, -- we don't want to lazy load VimTeX
+		ft = { "tex", "plaintex", "context", "latex", "markdown" },
 		-- tag = "v2.15", -- uncomment to pin to a specific release
 		init = function()
 			-- VimTeX configuration goes here, e.g.
