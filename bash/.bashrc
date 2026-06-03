@@ -98,12 +98,8 @@ export PATH="$PATH:~/go/bin/"
 
 # for sourcing bashrc
 alias sbashrc='source ~/.bashrc'
-alias tmuxt='tmux a -t terminal'
-
 # for running codeforces
-cprun(){
-  g++ "$1" -o cprun.out -std=c++17 && timeout 4s ./cprun.out && bat input.in output.txt && rm *.out && python3 check.py; 
-}
+
 
 bind -s 'set completion-ignore-case on'
 # bind -s 'set show-all-if-ambiguous on'
