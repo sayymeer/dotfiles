@@ -1,298 +1,90 @@
 return {
-	{
-		"nvim-neo-tree/neo-tree.nvim",
-		branch = "v3.x",
-		dependencies = {
-			"nvim-lua/plenary.nvim",
-			"nvim-tree/nvim-web-devicons",
-			"MunifTanjim/nui.nvim",
-		},
-		opts = {
-			window = {
-				position = "right", -- open on right
-				width = 30,
-			},
-			filesystem = {
-				follow_current_file = true,
-				use_libuv_file_watcher = true,
-			},
-		},
-		config = function(_, opts)
-			require("neo-tree").setup(opts)
-		end,
-	},
-	{
-		"nvim-tree/nvim-tree.lua",
-		opts = require("configs.nvtree"),
-		config = function(_, opts)
-			require("nvim-tree").setup(opts)
-		end,
-	},
+  {
+    "stevearc/conform.nvim",
+    event = "BufWritePre", -- uncomment for format on save
+    opts = require "configs.conform",
+  },
 
-	{
-		"stevearc/conform.nvim",
-		event = { "BufWritePre", "VeryLazy" }, -- uncomment for format on save
-		config = function()
-			require("configs.conform")
-		end,
-	},
+  -- These are some examples, uncomment them if you want to see them work!
+  {
+    "neovim/nvim-lspconfig",
+    version = false,
+    config = function()
+      require "configs.lspconfig"
+    end,
+  },
 
-	{
-		"neovim/nvim-lspconfig",
-		config = function()
-			require("nvchad.configs.lspconfig").defaults()
-			require("configs.lspconfig")
-		end,
-	},
+  -- test new blink
+  -- { import = "nvchad.blink.lazyspec" },
 
-	{
-		"williamboman/mason.nvim",
-		config = function()
-			require("mason").setup({
-				automatic_installation = true, -- auto-install LSPs
-			})
-		end,
-		opts = {
-			automatic_installation = true,
-			pkgs = {
-				"lua-language-server",
-				"stylua",
-				"html-lsp",
-				"css-lsp",
-				"prettier",
-				"clangd",
-				"clang-format",
-				"gopls",
-				"gofumpt",
-				"goimports",
-				"typescript-language-server",
-				"eslint-lsp",
-				"codelldb",
-				"rustfmt",
-				"pyright",
-				"r-languagserver",
-				"rust-analyzer",
-				"black",
-				"isort",
-				"pylint",
-				"eslint_d",
-			},
-		},
-	},
+  {
+    "nvim-treesitter/nvim-treesitter",
+    opts = {
+      ensure_installed = {
+        "vim",
+        "lua",
+        "vimdoc",
+        "html",
+        "css",
+        "bash",
+        "c",
+        "cpp",
+        "diff",
+        "luadoc",
+        "markdown",
+        "go",
+        "rust",
+        "json",
+        "yaml",
+        "gitignore",
+        "dockerfile",
+        "python",
+      },
+      auto_install = true,
+      highlight = {
+        enable = true,
+        additional_vim_regex_highlighting = false,
+      },
+      indent = {
+        enable = true,
+      },
+    },
+  },
+  {
+    "christoomey/vim-tmux-navigator",
+    lazy = false,
+  },
+  {
+    "nvimdev/lspsaga.nvim",
+    lazy = false,
+    config = function()
+      require("lspsaga").setup {}
+    end,
+    dependencies = {
+      "nvim-treesitter/nvim-treesitter", -- optional
+      "nvim-tree/nvim-web-devicons", -- optional
+    },
+  },
 
-	{
-		"nvim-treesitter/nvim-treesitter",
-		opts = {
-			ensure_installed = {
-				"vim",
-				"lua",
-				"vimdoc",
-				"html",
-				"css",
-				"bash",
-				"c",
-				"cpp",
-				"diff",
-				"luadoc",
-				"markdown",
-				"go",
-				"rust",
-				"json",
-				"yaml",
-				"gitignore",
-				"dockerfile",
-				"python",
-			},
-			auto_install = true,
-			highlight = {
-				enable = true,
-				additional_vim_regex_highlighting = false,
-			},
-			indent = {
-				enable = true,
-			},
-		},
-	},
+  {
+    "lervag/vimtex",
+    ft = { "tex" },
+    init = function()
+      vim.g.vimtex_view_method = "zathura"
+      vim.g.vimtex_compiler_method = "latexmk"
+      vim.g.vimtex_view_general_options = "--synctex-forward @line:@col:@tex @pdf"
+    end,
+  },
 
-	--dap plugin
-	{
-		"rcarriga/nvim-dap-ui",
-		event = "VeryLazy",
-		dependencies = { "mfussenegger/nvim-dap", "nvim-neotest/nvim-nio" },
-		config = function()
-			local dap = require("dap")
-			local dapui = require("dapui")
-			dapui.setup()
-			dap.listeners.after.event_initialized["dapui_config"] = function()
-				dapui.open()
-			end
-			dap.listeners.before.event_terminated["dapui_config"] = function()
-				dapui.close()
-			end
-			dap.listeners.before.event_exited["dapui_config"] = function()
-				dapui.close()
-			end
-		end,
-	},
-	{
-		"jay-babu/mason-nvim-dap.nvim",
-		event = "VeryLazy",
-		dependencies = {
-			"williamboman/mason.nvim",
-			"mfussenegger/nvim-dap",
-		},
-		opts = {
-			handlers = {},
-			automatic_installation = true,
-			ensure_installed = { "delve" },
-		},
-	},
-	{
-		"mfussenegger/nvim-dap",
-		config = function(_, _)
-			-- require("core.utils").load_mappings "dap"
-		end,
-	},
-
-	{
-		"olexsmir/gopher.nvim",
-		ft = "go",
-		config = function(_, opts)
-			require("gopher").setup(opts)
-			--require("core.utils").load_mappings("gopher")
-		end,
-		build = function()
-			vim.cmd([[silent! GoInstallDeps]])
-		end,
-	},
-	{
-		"christoomey/vim-tmux-navigator",
-		lazy = false,
-	},
-	{
-		"folke/todo-comments.nvim",
-		event = "VeryLazy",
-		dependencies = { "nvim-lua/plenary.nvim" },
-		opts = { signs = false },
-	},
-	{
-		"rust-lang/rust.vim",
-		ft = "rust",
-		init = function()
-			vim.g.rustfmt_autosave = 1
-		end,
-	},
-
-	{
-		"mfussenegger/nvim-lint",
-		event = {
-			"BufReadPre",
-			"BufNewFile",
-		},
-		config = function()
-			local lint = require("lint")
-			lint.linters_by_ft = {
-				javascript = { "eslint_d" },
-				typescript = { "eslint_d" },
-				javascriptreact = { "eslint_d" },
-				typescriptreact = { "eslint_d" },
-				svelte = { "eslint_d" },
-				python = { "pylint" },
-			}
-			local lint_augroup = vim.api.nvim_create_augroup("lint", { clear = true })
-
-			vim.api.nvim_create_autocmd({ "BufEnter", "BufWritePost", "InsertLeave" }, {
-				group = lint_augroup,
-				callback = function()
-					lint.try_lint()
-				end,
-			})
-			-- Set pylint to work in virtualenv
-			require("lint").linters.pylint.cmd = "python"
-			require("lint").linters.pylint.args = { "-m", "pylint", "-f", "json" }
-			vim.keymap.set("n", "<leader>l", function()
-				lint.try_lint()
-			end, { desc = "Trigger linting for current file" })
-		end,
-	},
-	{
-		"linux-cultist/venv-selector.nvim",
-		dependencies = {
-			"neovim/nvim-lspconfig",
-			"mfussenegger/nvim-dap",
-			"mfussenegger/nvim-dap-python", --optional
-			{ "nvim-telescope/telescope.nvim", branch = "0.1.x", dependencies = { "nvim-lua/plenary.nvim" } },
-		},
-		event = "VeryLazy",
-		ft = "python",
-		branch = "regexp", -- This is the regexp branch, use this for the new version
-		config = function()
-			require("venv-selector").setup({
-				auto_refresh = true,
-				-- path = "/home/sameer/code/",
-				search_venv_managers = true,
-				search = true,
-				parents = 4,
-				name = { ".venv", "venv" },
-			})
-		end,
-		keys = {
-			-- Keymap to open VenvSelector to pick a venv.
-			{ "<leader>vs", "<cmd>VenvSelect<cr>" },
-			-- Keymap to retrieve the venv from a cache (the one previously used for the same project directory).
-			-- { "<leader>vc", "<cmd>VenvSelectCached<cr>" },
-		},
-	},
-	{
-		"williamboman/mason-lspconfig.nvim",
-		dependencies = { "neovim/nvim-lspconfig" },
-		ensure_installed = {
-			"lua-language-server",
-			"stylua",
-			"html-lsp",
-			"css-lsp",
-			"prettier",
-			"clangd",
-			"gopls",
-			"typescript-language-server",
-			"eslint-lsp",
-			"pyright",
-			"r-languagserver",
-			"rust-analyzer",
-			"black",
-			"eslint_d",
-		},
-	},
-	{
-		"OXY2DEV/markview.nvim",
-		ft = { "markdown" },
-		config = function()
-			require("markview").setup({
-				markdown = {
-					latex = {
-						enabled = true, -- turn on LaTeX highlighting/rendering
-					},
-				},
-			})
-		end,
-	},
-	-- {
-	-- 	"nvimdev/dashboard-nvim",
-	-- 	event = "VimEnter",
-	-- 	config = function()
-	-- 		require("dashboard").setup({
-	-- 			-- config
-	-- 		})
-	-- 	end,
-	-- 	dependencies = { { "nvim-tree/nvim-web-devicons" } },
-	-- },
-	{
-		"lervag/vimtex",
-		ft = { "tex", "plaintex", "context", "latex", "markdown" },
-		-- tag = "v2.15", -- uncomment to pin to a specific release
-		init = function()
-			-- VimTeX configuration goes here, e.g.
-			vim.g.vimtex_view_method = "zathura"
-		end,
-	},
+  {
+    "MeanderingProgrammer/render-markdown.nvim",
+    dependencies = { "nvim-treesitter/nvim-treesitter", "nvim-tree/nvim-web-devicons" },
+    -- no ft restriction so it attaches to LSP hover floating windows (markdown filetype)
+    event = { "BufReadPost", "BufNewFile" },
+    opts = {
+      file_types = { "markdown" },
+      render_modes = { "n", "c", "t" },
+      hover = { enabled = true },
+    },
+  },
 }

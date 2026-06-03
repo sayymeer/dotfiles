@@ -10,7 +10,7 @@ local options = {
     json = { "prettier" },
     yaml = { "prettier" },
     markdown = { "prettier" },
-    python = { "isort", "black" },
+    python = { "ruff_fix", "ruff_format", "ruff_organize_imports" },
   },
 
   format_on_save = {
@@ -20,4 +20,4 @@ local options = {
   },
 }
 
-require("conform").setup(options)
+return options

@@ -1,11 +1,12 @@
--- This file  needs to have same structure as nvconfig.lua
--- https://github.com/NvChad/NvChad/blob/v2.5/lua/nvconfig.lua
+-- This file needs to have same structure as nvconfig.lua
+-- https://github.com/NvChad/ui/blob/v3.0/lua/nvconfig.lua
+-- Please read that file to know all available options :(
 
----@class ChadrcConfig
+---@type ChadrcConfig
 local M = {}
 
-M.ui = {
-  theme = "oxocarbon",
+M.base46 = {
+  theme = "chadracula-evondev",
 
   hl_override = {
     Comment = { italic = true },
@@ -13,15 +14,11 @@ M.ui = {
   },
 }
 
-M.plugins = {
-  override = {
-    -- ["kyazdani42/nvim-tree.lua"] = require "configs.nvtree",
+M.nvdash = { load_on_startup = true }
+M.ui = {
+  tabufline = {
+    lazyload = false,
   },
-  -- user = {
-  --   ["kyazdani42/nvim-tree.lua"] = {
-  --     lazy = false, -- this will disable lazy loading for nvim-tree
-  --   },
-  -- },
 }
 
 return M
