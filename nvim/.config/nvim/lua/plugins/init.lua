@@ -39,6 +39,7 @@ return {
 				"gitignore",
 				"dockerfile",
 				"python",
+				"makefile",
 			},
 			auto_install = true,
 			highlight = {
@@ -63,7 +64,6 @@ return {
 			vim.g.vimtex_view_general_options = "--synctex-forward @line:@col:@tex @pdf"
 		end,
 	},
-
 	{
 		"MeanderingProgrammer/render-markdown.nvim",
 		dependencies = { "nvim-treesitter/nvim-treesitter", "nvim-tree/nvim-web-devicons" },
@@ -74,5 +74,16 @@ return {
 			render_modes = { "n", "c", "t" },
 			hover = { enabled = true },
 		},
+	},
+	{
+		"kdheepak/cmp-latex-symbols",
+		dependencies = { "hrsh7th/nvim-cmp" },
+		ft = { "markdown", "tex" },
+		config = function()
+			local cmp = require("cmp")
+			local sources = vim.deepcopy(cmp.get_config().sources)
+			table.insert(sources, 1, { name = "latex_symbols", option = { strategy = 2 } })
+			cmp.setup.filetype({ "markdown", "tex" }, { sources = sources })
+		end,
 	},
 }
